@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="rv_event" type="id" />
+
+    <item name="tv_name" type="id" />
+    <item name="tv_date_event" type="id" />
+    <item name="tv_event" type="id" />
+    <item name="tv_home_team" type="id" />
+    <item name="tv_away_team" type="id" />
+    <item name="tv_home_score" type="id" />
+    <item name="tv_away_score" type="id" />
+
+    <item name="tv_home_goal_details" type="id" />
+    <item name="tv_home_shots" type="id" />
+    <item name="tv_home_formation" type="id" />
+    <item name="tv_home_lineup_goalkeeper" type="id" />
+    <item name="tv_home_lineup_defense" type="id" />
+    <item name="tv_home_lineup_midfielder" type="id" />
+    <item name="tv_home_lineup_forward" type="id" />
+    <item name="tv_home_lineup_subtitutes" type="id" />
+
+    <item name="tv_away_goal_details" type="id" />
+    <item name="tv_away_shots" type="id" />
+    <item name="tv_away_formation" type="id" />
+    <item name="tv_away_lineup_goalkeeper" type="id" />
+    <item name="tv_away_lineup_defense" type="id" />
+    <item name="tv_away_lineup_midfielder" type="id" />
+    <item name="tv_away_lineup_forward" type="id" />
+    <item name="tv_away_lineup_subtitutes" type="id" />
+
+    <item name="layout_menu" type="id" />
+    <item name="layout_content" type="id" />
+    <item name="navigation_match_schedule" type="id" />
+    <item name="swipe_refresh" type="id" />
+    <item name="iv_home_badge" type="id" />
+    <item name="iv_away_badge" type="id" />
+</resources>
