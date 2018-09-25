@@ -8,7 +8,6 @@ import id.ergun.myfootballdb.R
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.bottomNavigationView
 
-
 class MatchScheduleUI : AnkoComponent<MatchScheduleActivity> {
     private lateinit var layoutContent: FrameLayout
     lateinit var navigationView: BottomNavigationView

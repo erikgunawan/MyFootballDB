@@ -11,29 +11,29 @@ import java.util.concurrent.TimeUnit
 
 class RetrofitClient {
 
-    companion object {
-        private fun getClient(): Retrofit = Retrofit.Builder()
-                    .baseUrl(BuildConfig.BASE_URL + "api/v1/json/1/")
-                    .client(mClient())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build()
+    fun create(): ApiService {
+        val retrofit = Retrofit.Builder()
+                .baseUrl(BuildConfig.BASE_URL + "api/v1/json/1/")
+                .client(mClient())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
 
-        private fun mClient(): OkHttpClient = OkHttpClient.Builder()
-                    .addInterceptor(httpLoggingInterceptor())
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .build()
+        return retrofit.create(ApiService::class.java)
+    }
 
-        private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
-            val httpLoggingInterceptor = HttpLoggingInterceptor {
-                message -> Log.e("HTTP Log: ", message)
-            }
-            httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-            return httpLoggingInterceptor
+    private fun mClient(): OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor())
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
+
+    private fun httpLoggingInterceptor(): HttpLoggingInterceptor {
+        val httpLoggingInterceptor = HttpLoggingInterceptor {
+            message -> Log.e("HTTP Log: ", message)
         }
-
-        fun getApiService(): ApiService = getClient().create(ApiService::class.java)
+        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        return httpLoggingInterceptor
     }
 }

@@ -19,7 +19,8 @@ import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 
-class MatchScheduleNextFragment: Fragment(), MatchScheduleView {
+class MatchScheduleNextFragment: Fragment(), MatchScheduleView,
+        MatchScheduleAdapter.ItemClickListener {
 
     private lateinit var presenter: MatchSchedulePresenter
 
@@ -30,6 +31,7 @@ class MatchScheduleNextFragment: Fragment(), MatchScheduleView {
         val rootView = view.createView(AnkoContext.create(ctx, this))
 
         presenter = MatchSchedulePresenter(this)
+        presenter.onAttach(this)
         presenter.getEventsNextLeague(LEAGUE_ID)
 
         view.swipeRefresh.onRefresh {
@@ -38,12 +40,14 @@ class MatchScheduleNextFragment: Fragment(), MatchScheduleView {
             presenter.getEventsNextLeague(LEAGUE_ID)
         }
 
-        view.adapter = MatchScheduleAdapter(view.eventList) {
-            startActivity<MatchScheduleDetailActivity>(EVENT to it)
-        }
+        view.adapter = MatchScheduleAdapter(view.eventList, this)
 
         view.rvEvent.adapter = view.adapter
         return rootView
+    }
+
+    override fun onItemClick(v: View, position: Int) {
+        startActivity<MatchScheduleDetailActivity>(EVENT to view.adapter.getData()[position])
     }
 
     override fun showLoading() {
@@ -63,5 +67,10 @@ class MatchScheduleNextFragment: Fragment(), MatchScheduleView {
         view.eventList.clear()
         view.eventList.addAll(data.data.sortedWith(compareByDescending {it.dateEvent}))
         view.adapter.notifyDataSetChanged()
+    }
+
+    override fun onDestroyView() {
+        presenter.onDetach()
+        super.onDestroyView()
     }
 }

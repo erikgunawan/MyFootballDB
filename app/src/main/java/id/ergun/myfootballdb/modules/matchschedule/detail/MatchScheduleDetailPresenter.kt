@@ -1,17 +1,28 @@
 package id.ergun.myfootballdb.modules.matchschedule.detail
 
+import android.annotation.SuppressLint
 import android.util.Log
+import id.ergun.myfootballdb.bases.presenters.BasePresenter
+import id.ergun.myfootballdb.bases.views.BaseView
 import id.ergun.myfootballdb.configs.RetrofitClient
 import id.ergun.myfootballdb.models.Team
 import id.ergun.myfootballdb.modules.matchschedule.Event
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailView) {
+class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailView): BasePresenter<BaseView> {
 
+    private var compositeDisposable: CompositeDisposable? = null
+
+    private val apiService by lazy {
+        RetrofitClient().create()
+    }
+
+    @SuppressLint("CheckResult")
     fun getDetailEvent(event: Event) {
         view.showLoading()
-        RetrofitClient.getApiService().getDetailEvent(event.idEvent.toString())
+        compositeDisposable?.add(apiService.getDetailEvent(event.idEvent.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -27,7 +38,8 @@ class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailView) {
                             Log.e("Error", error.message)
                         }
                 )
-        RetrofitClient.getApiService().getDetailTeam(event.idHomeTeam.toString())
+        )
+        compositeDisposable?.add(apiService.getDetailTeam(event.idHomeTeam.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -39,8 +51,9 @@ class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailView) {
                             Log.e("Error", error.message)
                         }
                 )
+        )
 
-        RetrofitClient.getApiService().getDetailTeam(event.idAwayTeam.toString())
+        compositeDisposable?.add(apiService.getDetailTeam(event.idAwayTeam.toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -52,5 +65,14 @@ class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailView) {
                             Log.e("Error", error.message)
                         }
                 )
+        )
+    }
+
+    override fun onAttach(view: BaseView) {
+        compositeDisposable = CompositeDisposable()
+    }
+
+    override fun onDetach() {
+        compositeDisposable?.dispose()
     }
 }

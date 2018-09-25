@@ -9,17 +9,24 @@ import id.ergun.myfootballdb.utils.toLocalDate
 import org.jetbrains.anko.AnkoContext
 
 class MatchScheduleAdapter (private val event_list : List<Event>,
-                   private val listener: (Event) -> Unit)
+                   private val listener: (ItemClickListener))
     : RecyclerView.Adapter<MatchScheduleAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            ViewHolder(MatchScheduleAdapterUI().createView(AnkoContext.create(parent.context, parent)))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchScheduleAdapter.ViewHolder {
+        val view = ViewHolder(MatchScheduleAdapterUI().createView(AnkoContext.create(parent.context, parent)))
+        view.itemView.setOnClickListener {
+            listener.onItemClick(it, view.adapterPosition)
+        }
+        return view
+    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindItem(event_list[position], listener)
+        holder.bindItem(event_list[position])
     }
 
     override fun getItemCount(): Int = event_list.size
+
+    fun getData(): List<Event> = event_list
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private lateinit var tvDateEvent: TextView
@@ -28,7 +35,7 @@ class MatchScheduleAdapter (private val event_list : List<Event>,
         private lateinit var tvAwayTeam: TextView
         private lateinit var tvAwayScore: TextView
 
-        fun bindItem(event_list: Event, listener: (Event) -> Unit) {
+        fun bindItem(event_list: Event) {
 
             tvDateEvent = itemView.findViewById(R.id.tv_date_event)
             tvHomeTeam = itemView.findViewById(R.id.tv_home_team)
@@ -44,10 +51,10 @@ class MatchScheduleAdapter (private val event_list : List<Event>,
 
             val awayscore = event_list.intAwayScore ?: ""
             tvAwayScore.text = awayscore.toString()
-
-            itemView.setOnClickListener {
-                listener(event_list)
-            }
         }
+    }
+
+    interface ItemClickListener {
+        fun onItemClick(v: View, position: Int)
     }
 }

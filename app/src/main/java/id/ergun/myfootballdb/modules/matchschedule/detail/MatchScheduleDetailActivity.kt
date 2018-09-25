@@ -11,6 +11,7 @@ import id.ergun.myfootballdb.utils.invisible
 import id.ergun.myfootballdb.utils.toLocalDate
 import id.ergun.myfootballdb.utils.visible
 import org.jetbrains.anko.setContentView
+
 class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView {
 
     private lateinit var presenter: MatchScheduleDetailPresenter
@@ -24,6 +25,7 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
         val event = intent.getParcelableExtra<Event>(EVENT)
 
         presenter = MatchScheduleDetailPresenter(this)
+        presenter.onAttach(this)
         presenter.getDetailEvent(event)
     }
 
@@ -94,5 +96,10 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
 
     override fun showAwayBadge(url: String?) {
         Glide.with(this).load(url).into(view.ivAwayBadge)
+    }
+
+    override fun onDestroy() {
+        presenter.onDetach()
+        super.onDestroy()
     }
 }
