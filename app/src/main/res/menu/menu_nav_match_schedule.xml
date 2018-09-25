@@ -11,4 +11,8 @@
         android:icon="@drawable/ic_nav_next_match"
         android:title="@string/next_match" />
 
+    <item
+        android:id="@+id/navigation_favorite"
+        android:icon="@drawable/ic_added_favorite"
+        android:title="@string/favorites" />
 </menu>

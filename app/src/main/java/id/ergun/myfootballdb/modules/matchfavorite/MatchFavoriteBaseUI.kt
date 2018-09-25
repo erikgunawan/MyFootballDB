@@ -1,4 +1,4 @@
-package id.ergun.myfootballdb.modules.matchschedule.fragments
+package id.ergun.myfootballdb.modules.matchfavorite
 
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
@@ -7,18 +7,17 @@ import android.view.Gravity
 import android.widget.ProgressBar
 import id.ergun.myfootballdb.R
 import id.ergun.myfootballdb.R.color.colorAccent
-import id.ergun.myfootballdb.modules.matchschedule.Event
-import id.ergun.myfootballdb.modules.matchschedule.MatchScheduleAdapter
+import id.ergun.myfootballdb.db.MatchFavorite
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
-class MatchScheduleBaseUI<T> : AnkoComponent<T> {
+class MatchFavoriteBaseUI<T> : AnkoComponent<T> {
 
-    val eventList: MutableList<Event> = mutableListOf()
+    val eventList: MutableList<MatchFavorite> = mutableListOf()
 
     lateinit var rvEvent: RecyclerView
-    lateinit var adapter: MatchScheduleAdapter
+    lateinit var adapter: MatchFavoriteAdapter
     lateinit var progressBar: ProgressBar
     lateinit var swipeRefresh: SwipeRefreshLayout
 
@@ -47,7 +46,6 @@ class MatchScheduleBaseUI<T> : AnkoComponent<T> {
                         centerInParent()
                         gravity = Gravity.CENTER
                     }
-
                 }
             }
         }

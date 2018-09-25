@@ -5,12 +5,13 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import id.ergun.myfootballdb.bases.models.DTOEventList
 import id.ergun.myfootballdb.configs.EVENT
-import id.ergun.myfootballdb.configs.LEAGUE_ID
-import id.ergun.myfootballdb.modules.matchschedule.MatchScheduleAdapter
-import id.ergun.myfootballdb.modules.matchschedule.MatchSchedulePresenter
-import id.ergun.myfootballdb.modules.matchschedule.MatchScheduleView
+import id.ergun.myfootballdb.db.MatchFavorite
+import id.ergun.myfootballdb.modules.matchfavorite.MatchFavoriteAdapter
+import id.ergun.myfootballdb.modules.matchfavorite.MatchFavoriteBaseUI
+import id.ergun.myfootballdb.modules.matchfavorite.MatchFavoritePresenter
+import id.ergun.myfootballdb.modules.matchfavorite.MatchFavoriteView
+import id.ergun.myfootballdb.modules.matchschedule.Event
 import id.ergun.myfootballdb.modules.matchschedule.detail.MatchScheduleDetailActivity
 import id.ergun.myfootballdb.utils.invisible
 import id.ergun.myfootballdb.utils.visible
@@ -19,34 +20,35 @@ import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 
-class MatchScheduleNextFragment: Fragment(), MatchScheduleView,
-        MatchScheduleAdapter.ItemClickListener {
+class MatchFavoriteFragment: Fragment(), MatchFavoriteView,
+        MatchFavoriteAdapter.ItemClickListener {
 
-    private lateinit var presenter: MatchSchedulePresenter
+    private lateinit var presenter: MatchFavoritePresenter
 
-    private lateinit var view: MatchScheduleBaseUI<MatchScheduleNextFragment>
+    private lateinit var view: MatchFavoriteBaseUI<MatchFavoriteFragment>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        view = MatchScheduleBaseUI()
+        view = MatchFavoriteBaseUI()
         val rootView = view.createView(AnkoContext.create(ctx, this))
 
-        presenter = MatchSchedulePresenter(this)
+        presenter = MatchFavoritePresenter(context,this)
         presenter.onAttach(this)
-        presenter.getEventsNextLeague(LEAGUE_ID)
 
         view.swipeRefresh.onRefresh {
-            resetDataList()
             view.swipeRefresh.isRefreshing = false
-            presenter.getEventsNextLeague(LEAGUE_ID)
+            presenter.getFavoriteMatch()
         }
 
-        view.adapter = MatchScheduleAdapter(view.eventList, this)
+        view.adapter = MatchFavoriteAdapter(view.eventList, this)
         view.rvEvent.adapter = view.adapter
+
+        presenter.getFavoriteMatch()
         return rootView
     }
 
     override fun onItemClick(v: View, position: Int) {
-        startActivity<MatchScheduleDetailActivity>(EVENT to view.adapter.getData()[position])
+        val event: Event = MatchFavorite.Mapper.toEvent(view.adapter.getData()[position])
+        startActivity<MatchScheduleDetailActivity>(EVENT to event)
     }
 
     override fun showLoading() {
@@ -57,14 +59,9 @@ class MatchScheduleNextFragment: Fragment(), MatchScheduleView,
         view.progressBar.invisible()
     }
 
-    override fun resetDataList() {
+    override fun showDataList(match_favorites: List<MatchFavorite>) {
         view.eventList.clear()
-        view.adapter.notifyDataSetChanged()
-    }
-
-    override fun showDataList(data: DTOEventList) {
-        view.eventList.clear()
-        view.eventList.addAll(data.data.sortedWith(compareByDescending {it.dateEvent}))
+        view.eventList.addAll(match_favorites)
         view.adapter.notifyDataSetChanged()
     }
 

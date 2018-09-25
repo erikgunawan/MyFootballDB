@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import id.ergun.myfootballdb.R
+import id.ergun.myfootballdb.modules.matchschedule.fragments.MatchFavoriteFragment
 import id.ergun.myfootballdb.modules.matchschedule.fragments.MatchScheduleNextFragment
 import id.ergun.myfootballdb.modules.matchschedule.fragments.MatchSchedulePrevFragment
 import org.jetbrains.anko.setContentView
@@ -43,6 +44,11 @@ class MatchScheduleActivity : AppCompatActivity() {
             }
             R.id.navigation_next_match -> {
                 val fragment = MatchScheduleNextFragment()
+                addFragment(fragment)
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.navigation_favorite -> {
+                val fragment = MatchFavoriteFragment()
                 addFragment(fragment)
                 return@OnNavigationItemSelectedListener true
             }
