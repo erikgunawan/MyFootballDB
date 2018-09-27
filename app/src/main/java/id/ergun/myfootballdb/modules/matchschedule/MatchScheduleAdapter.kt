@@ -45,12 +45,12 @@ class MatchScheduleAdapter (private val event_list : List<Event>,
 
             tvDateEvent.text = toLocalDate(event_list.dateEvent)
             tvHomeTeam.text = event_list.strHomeTeam
-            val homescore = event_list.intHomeScore ?: ""
-            tvHomeScore.text = homescore.toString()
+            val homeScore = event_list.intHomeScore ?: ""
+            tvHomeScore.text = homeScore.toString()
             tvAwayTeam.text = event_list.strAwayTeam
 
-            val awayscore = event_list.intAwayScore ?: ""
-            tvAwayScore.text = awayscore.toString()
+            val awayScore = event_list.intAwayScore ?: ""
+            tvAwayScore.text = awayScore.toString()
         }
     }
 

@@ -66,14 +66,14 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
 
         view.tvHomeTeam.text = event.strHomeTeam
 
-        val homescore = event.intHomeScore ?: ""
-        view.tvHomeScore.text = homescore.toString()
+        val homeScore = event.intHomeScore ?: ""
+        view.tvHomeScore.text = homeScore.toString()
 
         view.tvHomeFormation.text = event.strHomeFormation
         view.tvHomeGoalDetails.text = formatString(event.strHomeGoalDetails,";",";\n")
 
-        val homeshots = event.intHomeShots ?: ""
-        view.tvHomeShots.text = homeshots.toString()
+        val homeShots = event.intHomeShots ?: ""
+        view.tvHomeShots.text = homeShots.toString()
         view.tvHomeLineupGoalkeeper.text = formatString(event.strHomeLineupGoalkeeper,";",";\n")
         view.tvHomeLineupDefense.text = formatString(event.strHomeLineupDefense,";",";\n")
         view.tvHomeLineupMidfielder.text = formatString(event.strHomeLineupMidfield,";",";\n")
@@ -82,14 +82,14 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
 
         view.tvAwayTeam.text = event.strAwayTeam
 
-        val awayscore = event.intAwayScore ?: ""
-        view.tvAwayScore.text = awayscore.toString()
+        val awayScore = event.intAwayScore ?: ""
+        view.tvAwayScore.text = awayScore.toString()
 
         view.tvAwayFormation.text = event.strAwayFormation
         view.tvAwayGoalDetails.text = formatString(event.strAwayGoalDetails,";",";\n")
 
-        val awayshots = event.intAwayShots ?: ""
-        view.tvAwayShots.text = awayshots.toString()
+        val awayShots = event.intAwayShots ?: ""
+        view.tvAwayShots.text = awayShots.toString()
 
         view.tvAwayLineupGoalkeeper.text = formatString(event.strAwayLineupGoalkeeper,";",";\n")
         view.tvAwayLineupDefense.text = formatString(event.strAwayLineupDefense,";",";\n")

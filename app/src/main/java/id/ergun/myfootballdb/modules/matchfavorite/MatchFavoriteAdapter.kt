@@ -47,12 +47,12 @@ class MatchFavoriteAdapter(private val event_list : List<MatchFavorite>,
 
             tvDateEvent.text = toLocalDate(event_list.dateEvent)
             tvHomeTeam.text = event_list.homeTeam
-            val homescore = event_list.homeScore ?: ""
-            tvHomeScore.text = homescore.toString()
+            val homeScore = event_list.homeScore ?: ""
+            tvHomeScore.text = homeScore.toString()
             tvAwayTeam.text = event_list.awayTeam
 
-            val awayscore = event_list.awayScore ?: ""
-            tvAwayScore.text = awayscore.toString()
+            val awayScore = event_list.awayScore ?: ""
+            tvAwayScore.text = awayScore.toString()
         }
     }
 
