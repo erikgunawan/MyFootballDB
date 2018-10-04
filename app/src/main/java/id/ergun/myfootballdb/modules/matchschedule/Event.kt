@@ -7,81 +7,81 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Event(
         @SerializedName("idEvent")
-        var idEvent: Int? = null,
+        val idEvent: Int? = null,
         @SerializedName("idSoccerXML")
-        var idSoccerXML: Int? = null,
+        val idSoccerXML: Int? = null,
         @SerializedName("strEvent")
-        var strEvent: String? = null,
+        val strEvent: String? = null,
         @SerializedName("strFilename")
-        var strFilename: String? = null,
+        val strFilename: String? = null,
         @SerializedName("strSport")
-        var strSport: String? = null,
+        val strSport: String? = null,
         @SerializedName("idLeague")
-        var idLeague: Int? = null,
+        val idLeague: Int? = null,
         @SerializedName("strLeague")
-        var strLeague: String? = null,
+        val strLeague: String? = null,
         @SerializedName("strSeason")
-        var strSeason: String? = null,
+        val strSeason: String? = null,
         @SerializedName("strHomeTeam")
-        var strHomeTeam: String? = null,
+        val strHomeTeam: String? = null,
         @SerializedName("strAwayTeam")
-        var strAwayTeam: String? = null,
+        val strAwayTeam: String? = null,
         @SerializedName("intHomeScore")
-        var intHomeScore: Int? = null,
+        val intHomeScore: Int? = null,
         @SerializedName("intRound")
-        var intRound: Int? = null,
+        val intRound: Int? = null,
         @SerializedName("intAwayScore")
-        var intAwayScore: Int? = null,
+        val intAwayScore: Int? = null,
         @SerializedName("strHomeGoalDetails")
-        var strHomeGoalDetails: String? = null,
+        val strHomeGoalDetails: String? = null,
         @SerializedName("strHomeRedCards")
-        var strHomeRedCards: String? = null,
+        val strHomeRedCards: String? = null,
         @SerializedName("strHomeYellowCards")
-        var strHomeYellowCards: String? = null,
+        val strHomeYellowCards: String? = null,
         @SerializedName("strHomeLineupGoalkeeper")
-        var strHomeLineupGoalkeeper: String? = null,
+        val strHomeLineupGoalkeeper: String? = null,
         @SerializedName("strHomeLineupDefense")
-        var strHomeLineupDefense: String? = null,
+        val strHomeLineupDefense: String? = null,
         @SerializedName("strHomeLineupMidfield")
-        var strHomeLineupMidfield: String? = null,
+        val strHomeLineupMidfield: String? = null,
         @SerializedName("strHomeLineupForward")
-        var strHomeLineupForward: String? = null,
+        val strHomeLineupForward: String? = null,
         @SerializedName("strHomeLineupSubstitutes")
-        var strHomeLineupSubstitutes: String? = null,
+        val strHomeLineupSubstitutes: String? = null,
         @SerializedName("strHomeFormation")
-        var strHomeFormation: String? = null,
+        val strHomeFormation: String? = null,
         @SerializedName("strAwayRedCards")
-        var strAwayRedCards: String? = null,
+        val strAwayRedCards: String? = null,
         @SerializedName("strAwayYellowCards")
-        var strAwayYellowCards: String? = null,
+        val strAwayYellowCards: String? = null,
         @SerializedName("strAwayGoalDetails")
-        var strAwayGoalDetails: String? = null,
+        val strAwayGoalDetails: String? = null,
         @SerializedName("strAwayLineupGoalkeeper")
-        var strAwayLineupGoalkeeper: String? = null,
+        val strAwayLineupGoalkeeper: String? = null,
         @SerializedName("strAwayLineupDefense")
-        var strAwayLineupDefense: String? = null,
+        val strAwayLineupDefense: String? = null,
         @SerializedName("strAwayLineupMidfield")
-        var strAwayLineupMidfield: String? = null,
+        val strAwayLineupMidfield: String? = null,
         @SerializedName("strAwayLineupForward")
-        var strAwayLineupForward: String? = null,
+        val strAwayLineupForward: String? = null,
         @SerializedName("strAwayLineupSubstitutes")
-        var strAwayLineupSubstitutes: String? = null,
+        val strAwayLineupSubstitutes: String? = null,
         @SerializedName("strAwayFormation")
-        var strAwayFormation: String? = null,
+        val strAwayFormation: String? = null,
         @SerializedName("intHomeShots")
-        var intHomeShots: Int? = null,
+        val intHomeShots: Int? = null,
         @SerializedName("intAwayShots")
-        var intAwayShots: Int? = null,
+        val intAwayShots: Int? = null,
         @SerializedName("dateEvent")
-        var dateEvent: String? = null,
+        val dateEvent: String? = null,
         @SerializedName("strDate")
-        var strDate: String? = null,
+        val strDate: String? = null,
         @SerializedName("strTime")
-        var strTime: String? = null,
+        val strTime: String? = null,
         @SerializedName("idHomeTeam")
-        var idHomeTeam: Int? = null,
+        val idHomeTeam: Int? = null,
         @SerializedName("idAwayTeam")
-        var idAwayTeam: Int? = null,
+        val idAwayTeam: Int? = null,
         @SerializedName("strLocked")
-        var strLocked: String? = null
+        val strLocked: String? = null
 ): Parcelable

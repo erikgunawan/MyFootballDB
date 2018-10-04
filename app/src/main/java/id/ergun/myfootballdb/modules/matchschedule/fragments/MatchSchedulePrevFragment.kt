@@ -22,6 +22,15 @@ import org.jetbrains.anko.support.v4.startActivity
 class MatchSchedulePrevFragment: Fragment(), MatchScheduleView,
         MatchScheduleAdapter.ItemClickListener {
 
+    override fun onDataLoaded(data: DTOEventList) {
+        hideLoading()
+        showDataList(data)
+    }
+
+    override fun onDataError() {
+        hideLoading()
+    }
+
     private lateinit var presenter: MatchSchedulePresenter
 
     private lateinit var view: MatchScheduleBaseUI<MatchSchedulePrevFragment>

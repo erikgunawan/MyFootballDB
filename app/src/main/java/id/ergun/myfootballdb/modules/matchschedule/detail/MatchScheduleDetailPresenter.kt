@@ -1,78 +1,66 @@
 package id.ergun.myfootballdb.modules.matchschedule.detail
 
-import android.annotation.SuppressLint
-import android.util.Log
+import id.ergun.myfootballdb.bases.models.DTOEventList
+import id.ergun.myfootballdb.bases.models.DTOTeamList
 import id.ergun.myfootballdb.bases.presenters.BasePresenter
+import id.ergun.myfootballdb.bases.repositories.EventListRepositoryCallback
+import id.ergun.myfootballdb.bases.repositories.TeamListRepositoryCallback
 import id.ergun.myfootballdb.bases.views.BaseView
-import id.ergun.myfootballdb.configs.RetrofitClient
-import id.ergun.myfootballdb.models.Team
-import id.ergun.myfootballdb.modules.matchschedule.Event
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import id.ergun.myfootballdb.configs.AWAY
+import id.ergun.myfootballdb.configs.HOME
 
-class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailView): BasePresenter<BaseView> {
+class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailView,
+                                   private val matchScheduleDetailRepository: MatchScheduleDetailRepository = MatchScheduleDetailRepository()): BasePresenter<BaseView> {
 
-    private var compositeDisposable: CompositeDisposable? = null
+    fun getDetailEvent(id: String) {
+        view.showLoading()
 
-    private val apiService by lazy {
-        RetrofitClient().create()
+        matchScheduleDetailRepository
+                .getDetailEvent(id, object : EventListRepositoryCallback {
+                    override fun onDataLoaded(data: DTOEventList) {
+                        view.onDataLoaded(data)
+                    }
+
+                    override fun onDataError() {
+                        view.onDataError()
+                    }
+                })
+
     }
 
-    @SuppressLint("CheckResult")
-    fun getDetailEvent(event: Event) {
-        view.showLoading()
-        compositeDisposable?.add(apiService.getDetailEvent(event.idEvent.toString())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { events ->
-                            Log.d("log", events.toString())
-                            view.hideLoading()
+    fun getDetailTeam(id: String, side: String) {
+        if (side == HOME) {
+            matchScheduleDetailRepository
+                    .getDetailHomeTeam(id, object : TeamListRepositoryCallback {
+                        override fun onDataLoaded(data: DTOTeamList, side: String) {
+                            view.onDataLoaded(data, side)
+                        }
 
-                            val ev: Event = events.data[0]
-                            view.showData(ev)
-                        },
-                        { error ->
-                            view.hideLoading()
-                            Log.e("Error", error.message)
+                        override fun onDataError(side: String) {
+                            view.onDataError(side)
                         }
-                )
-        )
-        compositeDisposable?.add(apiService.getDetailTeam(event.idHomeTeam.toString())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { teams ->
-                            val team: Team = teams.data[0]
-                            view.showHomeBadge(team.strTeamBadge)
-                        },
-                        { error ->
-                            Log.e("Error", error.message)
+                    })
+        }
+        else if (side == AWAY) {
+            matchScheduleDetailRepository
+                    .getDetailAwayTeam(id, object : TeamListRepositoryCallback {
+                        override fun onDataLoaded(data: DTOTeamList, side: String) {
+                            view.onDataLoaded(data, side)
                         }
-                )
-        )
 
-        compositeDisposable?.add(apiService.getDetailTeam(event.idAwayTeam.toString())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { teams ->
-                            val team: Team = teams.data[0]
-                            view.showAwayBadge(team.strTeamBadge)
-                        },
-                        { error ->
-                            Log.e("Error", error.message)
+                        override fun onDataError(side: String) {
+                            view.onDataError(side)
                         }
-                )
-        )
+                    })
+        }
+
     }
 
     override fun onAttach(view: BaseView) {
-        compositeDisposable = CompositeDisposable()
+        matchScheduleDetailRepository.onAttach()
     }
 
     override fun onDetach() {
-        compositeDisposable?.dispose()
+        matchScheduleDetailRepository.onDetach()
     }
 }

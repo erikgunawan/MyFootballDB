@@ -1,68 +1,47 @@
 package id.ergun.myfootballdb.modules.matchschedule
 
-import android.annotation.SuppressLint
-import android.util.Log
+import id.ergun.myfootballdb.bases.models.DTOEventList
 import id.ergun.myfootballdb.bases.presenters.BasePresenter
+import id.ergun.myfootballdb.bases.repositories.EventListRepositoryCallback
 import id.ergun.myfootballdb.bases.views.BaseView
-import id.ergun.myfootballdb.configs.RetrofitClient
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
-class MatchSchedulePresenter(private val view: MatchScheduleView): BasePresenter<BaseView> {
+class MatchSchedulePresenter(private val view: MatchScheduleView,
+                             private val matchScheduleRepository: MatchScheduleRepository = MatchScheduleRepository()): BasePresenter<BaseView> {
 
-    private var compositeDisposable: CompositeDisposable? = null
-
-    private val apiService by lazy {
-        RetrofitClient().create()
-    }
-
-    @SuppressLint("CheckResult")
     fun getEventsNextLeague(id: String) {
         view.showLoading()
 
-        compositeDisposable?.add(apiService.getEventsNextLeague(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { events ->
-                            Log.d("log", events.toString())
-                            view.hideLoading()
-                            view.showDataList(events)
-                        },
-                        { error ->
-                            view.hideLoading()
-                            Log.e("Error", error.message)
-                        }
-                ))
+        matchScheduleRepository
+                .getEventsNextLeague(id, object : EventListRepositoryCallback {
+                    override fun onDataLoaded(data: DTOEventList) {
+                        view.onDataLoaded(data)
+                    }
+
+                    override fun onDataError() {
+                        view.onDataError()
+                    }
+                })
     }
 
-    @SuppressLint("CheckResult")
     fun getEventsPastLeague(id: String) {
         view.showLoading()
-        compositeDisposable?.add(apiService.getEventsPastLeague(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { events ->
-                            Log.d("log", events.toString())
-                            view.hideLoading()
-                            view.showDataList(events)
-                        },
-                        { error ->
-                            view.hideLoading()
-                            Log.e("Error", error.message)
-                        }
-                )
-        )
+        matchScheduleRepository
+                .getEventsPastLeague(id, object : EventListRepositoryCallback {
+                    override fun onDataLoaded(data: DTOEventList) {
+                        view.onDataLoaded(data)
+                    }
+
+                    override fun onDataError() {
+                        view.onDataError()
+                    }
+                })
     }
 
     override fun onAttach(view: BaseView) {
-        compositeDisposable = CompositeDisposable()
+        matchScheduleRepository.onAttach()
     }
 
-
     override fun onDetach() {
-        compositeDisposable?.dispose()
+        matchScheduleRepository.onDetach()
     }
 }

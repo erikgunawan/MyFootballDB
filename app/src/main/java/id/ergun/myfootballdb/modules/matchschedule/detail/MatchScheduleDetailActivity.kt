@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.bumptech.glide.Glide
@@ -11,9 +12,14 @@ import id.ergun.myfootballdb.R.drawable.ic_add_favorite
 import id.ergun.myfootballdb.R.drawable.ic_added_favorite
 import id.ergun.myfootballdb.R.id.add_to_favorite
 import id.ergun.myfootballdb.R.menu.menu_match_schedule_detail
+import id.ergun.myfootballdb.bases.models.DTOEventList
+import id.ergun.myfootballdb.bases.models.DTOTeamList
+import id.ergun.myfootballdb.configs.AWAY
 import id.ergun.myfootballdb.configs.EVENT
+import id.ergun.myfootballdb.configs.HOME
 import id.ergun.myfootballdb.db.MatchFavorite
 import id.ergun.myfootballdb.db.database
+import id.ergun.myfootballdb.models.Team
 import id.ergun.myfootballdb.modules.matchschedule.Event
 import id.ergun.myfootballdb.utils.formatString
 import id.ergun.myfootballdb.utils.invisible
@@ -48,15 +54,20 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
 
         presenter = MatchScheduleDetailPresenter(this)
         presenter.onAttach(this)
-        presenter.getDetailEvent(event)
+        loadAll()
 
         favoriteState()
 
         view.swipeRefresh.onRefresh {
             view.swipeRefresh.isRefreshing = false
-            presenter.getDetailEvent(event)
+            loadAll()
         }
+    }
 
+    private fun loadAll() {
+        presenter.getDetailEvent(event.idEvent.toString())
+        presenter.getDetailTeam(event.idHomeTeam.toString(), HOME)
+        presenter.getDetailTeam(event.idAwayTeam.toString(), AWAY)
     }
 
     private fun fillData(event: Event) {
@@ -119,6 +130,31 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
     override fun showAwayBadge(url: String?) {
         this.awayBadge = url
         Glide.with(this).load(url).into(view.ivAwayBadge)
+    }
+
+    override fun onDataError() {
+        hideLoading()
+    }
+
+    override fun onDataLoaded(data: DTOEventList) {
+        hideLoading()
+
+        val ev: Event = data.data[0]
+        showData(ev)
+    }
+
+    override fun onDataLoaded(data: DTOTeamList, side: String) {
+        val team: Team = data.data[0]
+        if (side == HOME) {
+            showHomeBadge(team.strTeamBadge)
+        }
+        else if (side == AWAY) {
+            showAwayBadge(team.strTeamBadge)
+        }
+    }
+
+    override fun onDataError(side: String) {
+        Log.d("error", side)
     }
 
     override fun onDestroy() {
@@ -200,7 +236,7 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
                 delete(MatchFavorite.TABLE_MATCH_FAVORITE, "(" + MatchFavorite.ID_EVENT + " = {id})",
                         "id" to event.idEvent.toString())
             }
-            snackbar(view.swipeRefresh, "Removed to favorite").show()
+            snackbar(view.swipeRefresh, "Removed from favorite").show()
         } catch (e: SQLiteConstraintException){
             snackbar(view.swipeRefresh, e.localizedMessage).show()
         }

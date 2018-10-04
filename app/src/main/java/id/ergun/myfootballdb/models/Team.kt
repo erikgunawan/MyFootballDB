@@ -77,5 +77,5 @@ data class Team(
         @SerializedName("strYoutube")
         val strYoutube: String? = null,
         @SerializedName("strLocked")
-        val strLocked: String
+        val strLocked: String? = null
 )

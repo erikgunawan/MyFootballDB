@@ -22,6 +22,15 @@ import org.jetbrains.anko.support.v4.startActivity
 class MatchScheduleNextFragment: Fragment(), MatchScheduleView,
         MatchScheduleAdapter.ItemClickListener {
 
+    override fun onDataLoaded(data: DTOEventList) {
+        hideLoading()
+        showDataList(data)
+    }
+
+    override fun onDataError() {
+        hideLoading()
+    }
+
     private lateinit var presenter: MatchSchedulePresenter
 
     private lateinit var view: MatchScheduleBaseUI<MatchScheduleNextFragment>
@@ -32,7 +41,8 @@ class MatchScheduleNextFragment: Fragment(), MatchScheduleView,
 
         presenter = MatchSchedulePresenter(this)
         presenter.onAttach(this)
-        presenter.getEventsNextLeague(LEAGUE_ID)
+        presenter.
+                getEventsNextLeague(LEAGUE_ID)
 
         view.swipeRefresh.onRefresh {
             resetDataList()
@@ -67,6 +77,8 @@ class MatchScheduleNextFragment: Fragment(), MatchScheduleView,
         view.eventList.addAll(data.data.sortedWith(compareByDescending {it.dateEvent}))
         view.adapter.notifyDataSetChanged()
     }
+
+
 
     override fun onDestroyView() {
         presenter.onDetach()
