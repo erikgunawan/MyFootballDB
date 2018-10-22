@@ -22,14 +22,14 @@ import org.jetbrains.anko.support.v4.startActivity
 class MatchScheduleNextFragment: Fragment(), MatchScheduleView,
         MatchScheduleAdapter.ItemClickListener {
 
-    override fun onDataLoaded(data: DTOEventList) {
-        hideLoading()
-        showDataList(data)
-    }
-
-    override fun onDataError() {
-        hideLoading()
-    }
+//    override fun onDataLoaded(data: DTOEventList) {
+//        hideLoading()
+//        showDataList(data)
+//    }
+//
+//    override fun onDataError() {
+//        hideLoading()
+//    }
 
     private lateinit var presenter: MatchSchedulePresenter
 

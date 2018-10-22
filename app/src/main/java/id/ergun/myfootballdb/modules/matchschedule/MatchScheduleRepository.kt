@@ -1,50 +1,63 @@
 package id.ergun.myfootballdb.modules.matchschedule
 
-import id.ergun.myfootballdb.bases.repositories.EventListRepositoryCallback
+import id.ergun.myfootballdb.bases.models.DTOEventList
+import id.ergun.myfootballdb.configs.ApiService
 import id.ergun.myfootballdb.configs.RetrofitClient
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 
-class MatchScheduleRepository {
+interface MatchScheduleRepository {
+    fun getEventsNextLeague(id: String): Observable<DTOEventList>
+    fun getEventsPastLeague(id: String): Observable<DTOEventList>
+}
+
+class MatchScheduleRepositoryImpl(private var apiService: ApiService = RetrofitClient().create()): MatchScheduleRepository {
 
     private var compositeDisposable: CompositeDisposable? = null
+//
+//    private val apiService by lazy {
+//        RetrofitClient().create()
+//    }
 
-    private val apiService by lazy {
-        RetrofitClient().create()
+    override fun getEventsNextLeague(id: String): Observable<DTOEventList> {
+        return apiService.getEventsNextLeague(id)
     }
 
-    fun getEventsNextLeague(id: String, callback: EventListRepositoryCallback) {
-        compositeDisposable?.add(
-                apiService.getEventsNextLeague(id)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                { events ->
-                                    callback.onDataLoaded(events)
-                                },
-                                {
-                                    callback.onDataError()
-                                }
-                        )
-        )
+    override fun getEventsPastLeague(id: String): Observable<DTOEventList> {
+        return apiService.getEventsPastLeague(id)
     }
 
-    fun getEventsPastLeague(id: String, callback: EventListRepositoryCallback) {
-        compositeDisposable?.add(
-                apiService.getEventsPastLeague(id)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { events ->
-                            callback.onDataLoaded(events)
-                        },
-                        {
-                            callback.onDataError()
-                        }
-                )
-        )
-    }
+//    override fun getEventsNextLeague(id: String, callback: EventListRepositoryCallback) {
+//        compositeDisposable?.add(
+//                apiService.getEventsNextLeague(id)
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(
+//                                { events ->
+//                                    callback.onDataLoaded(events)
+//                                },
+//                                {
+//                                    callback.onDataError()
+//                                }
+//                        )
+//        )
+//    }
+//
+//    override fun getEventsPastLeague(id: String, callback: EventListRepositoryCallback, schedulerProvider: SchedulerProvider) {
+//        compositeDisposable?.add(
+//                apiService.getEventsPastLeague(id)
+//                .subscribeOn(schedulerProvider.io())
+//                .observeOn(schedulerProvider.ui())
+//                .subscribe(
+//                        { events ->
+//                            callback.onDataLoaded(events)
+//                        },
+//                        {
+//                            callback.onDataError()
+//                        }
+//                )
+//        )
+//    }
 
     fun onAttach() {
         compositeDisposable = CompositeDisposable()

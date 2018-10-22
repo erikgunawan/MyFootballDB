@@ -12,7 +12,6 @@ import id.ergun.myfootballdb.R.drawable.ic_add_favorite
 import id.ergun.myfootballdb.R.drawable.ic_added_favorite
 import id.ergun.myfootballdb.R.id.add_to_favorite
 import id.ergun.myfootballdb.R.menu.menu_match_schedule_detail
-import id.ergun.myfootballdb.bases.models.DTOEventList
 import id.ergun.myfootballdb.bases.models.DTOTeamList
 import id.ergun.myfootballdb.configs.AWAY
 import id.ergun.myfootballdb.configs.EVENT
@@ -66,8 +65,10 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
 
     private fun loadAll() {
         presenter.getDetailEvent(event.idEvent.toString())
-        presenter.getDetailTeam(event.idHomeTeam.toString(), HOME)
-        presenter.getDetailTeam(event.idAwayTeam.toString(), AWAY)
+        presenter.getDetailHomeTeam(event.idHomeTeam.toString())
+        presenter.getDetailAwayTeam(event.idAwayTeam.toString())
+//        presenter.getDetailTeam(event.idHomeTeam.toString(), HOME)
+//        presenter.getDetailTeam(event.idAwayTeam.toString(), AWAY)
     }
 
     private fun fillData(event: Event) {
@@ -132,16 +133,16 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
         Glide.with(this).load(url).into(view.ivAwayBadge)
     }
 
-    override fun onDataError() {
-        hideLoading()
-    }
+//    override fun onDataError() {
+//        hideLoading()
+//    }
 
-    override fun onDataLoaded(data: DTOEventList) {
-        hideLoading()
-
-        val ev: Event = data.data[0]
-        showData(ev)
-    }
+//    override fun onDataLoaded(data: DTOEventList) {
+//        hideLoading()
+//
+//        val ev: Event = data.data[0]
+//        showData(ev)
+//    }
 
     override fun onDataLoaded(data: DTOTeamList, side: String) {
         val team: Team = data.data[0]

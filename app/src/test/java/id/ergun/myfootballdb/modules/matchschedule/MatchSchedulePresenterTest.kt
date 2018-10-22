@@ -1,11 +1,13 @@
 package id.ergun.myfootballdb.modules.matchschedule
 
-import com.nhaarman.mockito_kotlin.argumentCaptor
-import com.nhaarman.mockito_kotlin.eq
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import id.ergun.myfootballdb.bases.models.DTOEventList
-import id.ergun.myfootballdb.bases.repositories.EventListRepositoryCallback
+import id.ergun.myfootballdb.utils.scheduler.RxImmediateSchedulerRule
+import id.ergun.myfootballdb.utils.scheduler.ScheduleProviderTest
+import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -17,77 +19,52 @@ class MatchSchedulePresenterTest {
     private lateinit var view: MatchScheduleView
 
     @Mock
-    private lateinit var repository: MatchScheduleRepository
+    private lateinit var repository: MatchScheduleRepositoryImpl
 
-    @Mock
-    private lateinit var events: DTOEventList
+    private lateinit var dtoEventList: DTOEventList
+
+    private var events = mutableListOf<Event>()
 
     private lateinit var presenter: MatchSchedulePresenter
+
+    @Rule
+    @JvmField var testSchedulerRule = RxImmediateSchedulerRule()
+
+    @Mock
+    private var compositeDisposable: CompositeDisposable? = CompositeDisposable()
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
 
-        presenter = MatchSchedulePresenter(view, repository)
+        dtoEventList = DTOEventList(events)
+
+        presenter = MatchSchedulePresenter(view, repository, ScheduleProviderTest(), compositeDisposable)
     }
 
     @Test
     fun getEventsNextLeagueTest() {
         val id = "4328"
 
-        presenter.getEventsNextLeague(id)
-
-        argumentCaptor<EventListRepositoryCallback>().apply {
-            verify(repository).getEventsNextLeague(eq(id), capture())
-            firstValue.onDataLoaded(events)
-        }
-
-        Mockito.verify(view).showLoading()
-        Mockito.verify(view).onDataLoaded(events)
-    }
-
-    @Test
-    fun getEventsNextLeagueErrorTest() {
-        val id = ""
+        whenever(repository.getEventsNextLeague(id))
+                .thenReturn(Observable.just(dtoEventList))
 
         presenter.getEventsNextLeague(id)
-
-        argumentCaptor<EventListRepositoryCallback>().apply {
-            verify(repository).getEventsNextLeague(eq(id), capture())
-            firstValue.onDataError()
-        }
-
         Mockito.verify(view).showLoading()
-        Mockito.verify(view).onDataError()
+        Mockito.verify(view).showDataList(dtoEventList)
+        Mockito.verify(view).hideLoading()
     }
 
     @Test
     fun getEventsPastLeagueTest() {
         val id = "4328"
 
-        presenter.getEventsPastLeague(id)
-
-        argumentCaptor<EventListRepositoryCallback>().apply {
-            verify(repository).getEventsPastLeague(eq(id), capture())
-            firstValue.onDataLoaded(events)
-        }
-
-        Mockito.verify(view).showLoading()
-        Mockito.verify(view).onDataLoaded(events)
-    }
-
-    @Test
-    fun getEventsPastLeagueErrorTest() {
-        val id = ""
+        whenever(repository.getEventsPastLeague(id))
+                .thenReturn(Observable.just(dtoEventList))
 
         presenter.getEventsPastLeague(id)
-
-        argumentCaptor<EventListRepositoryCallback>().apply {
-            verify(repository).getEventsPastLeague(eq(id), capture())
-            firstValue.onDataError()
-        }
-
         Mockito.verify(view).showLoading()
-        Mockito.verify(view).onDataError()
+        Mockito.verify(view).showDataList(dtoEventList)
+        Mockito.verify(view).hideLoading()
     }
 }
