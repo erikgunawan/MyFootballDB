@@ -51,7 +51,7 @@ class MatchSearchPresenterTest {
     }
 
     @Test
-    fun getAllLeaguesTest() {
+    fun searchEventsTest() {
         val name = "Arsenal_vs_Chelsea"
         whenever(eventRepository.searchEvents(name))
                 .thenReturn(Observable.just(dtoEventSearchList))
