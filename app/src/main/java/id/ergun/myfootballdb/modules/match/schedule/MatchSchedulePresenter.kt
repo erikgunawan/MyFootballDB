@@ -1,52 +1,55 @@
-package id.ergun.myfootballdb.modules.matchschedule
+package id.ergun.myfootballdb.modules.match.schedule
 
 import android.util.Log
-import id.ergun.myfootballdb.bases.presenters.BasePresenter
 import id.ergun.myfootballdb.bases.views.BaseView
+import id.ergun.myfootballdb.repositories.EventRepositoryImpl
+import id.ergun.myfootballdb.repositories.LeagueRepositoryImpl
 import id.ergun.myfootballdb.utils.espresso.EspressoTestingIdlingResource
 import id.ergun.myfootballdb.utils.scheduler.AppSchedulerProvider
 import id.ergun.myfootballdb.utils.scheduler.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 
-class MatchSchedulePresenter(private val view: MatchScheduleView,
-                             private val matchScheduleRepository: MatchScheduleRepositoryImpl = MatchScheduleRepositoryImpl(),
+class MatchSchedulePresenter(private val view: MatchScheduleContract.View,
+                             private val leagueRepository: LeagueRepositoryImpl = LeagueRepositoryImpl(),
+                             private val eventRepository: EventRepositoryImpl = EventRepositoryImpl(),
                              private val schedulerProvider: SchedulerProvider = AppSchedulerProvider(),
-                             private var compositeDisposable: CompositeDisposable? = CompositeDisposable()): BasePresenter<BaseView> {
+                             private var compositeDisposable: CompositeDisposable? = CompositeDisposable()): MatchScheduleContract.Presenter {
 
-//    private var compositeDisposable: CompositeDisposable? = null
+    fun getAllLeagues() {
+        EspressoTestingIdlingResource.increment()
+        view.showLoading()
+        compositeDisposable?.add(
+                leagueRepository.getAllLeagues()
+                        .subscribeOn(schedulerProvider.io())
+                        .observeOn(schedulerProvider.ui())
+                        .subscribe(
+                                { data ->
+                                    val leagues = data.data.filter { it.strSport.equals("Soccer") }
+                                    view.showLeagueList(leagues)
+                                    view.hideLoading()
+                                    EspressoTestingIdlingResource.decrement()
 
-//    private val apiService by lazy {
-//        RetrofitClient().create()
-//    }
-//
-//    fun getEventsNextLeague(id: String, schedulerProvider: SchedulerProvider = AppSchedulerProvider()) {
-//        view.showLoading()
-//
-//        compositeDisposable?.add(
-//                apiService.getEventsNextLeague(id)
-//                        .subscribeOn(schedulerProvider.io())
-//                        .observeOn(schedulerProvider.ui())
-//                        .subscribe(
-//                                { events ->
-//                                    view.showDataList(events)
-//                                },
-//                                {
-//                                    view.onDataError()
-//                                }
-//                        )
-//        )
-//    }
+                                },
+                                {
+                                    view.hideLoading()
+//                                    view.showLeagueList(DTOLeagueList(mutableListOf()))
+                                    Log.e("AllLeagues", it.message.toString())
+                                    EspressoTestingIdlingResource.decrement()
+                                }
+                        )
+        )
+    }
 
     fun getEventsNextLeague(id: String) {
         EspressoTestingIdlingResource.increment()
         view.showLoading()
         compositeDisposable?.add(
-                matchScheduleRepository.getEventsNextLeague(id)
+                eventRepository.getEventsNextLeague(id)
                         .subscribeOn(schedulerProvider.io())
                         .observeOn(schedulerProvider.ui())
                         .subscribe(
                                 { events ->
-                                    view.showDataList(events)
+                                    view.showDataList(events.data.sortedWith(compareByDescending {it.dateEvent}))
                                     view.hideLoading()
                                     EspressoTestingIdlingResource.decrement()
 
@@ -64,12 +67,12 @@ class MatchSchedulePresenter(private val view: MatchScheduleView,
         EspressoTestingIdlingResource.increment()
         view.showLoading()
         compositeDisposable?.add(
-                matchScheduleRepository.getEventsPastLeague(id)
+                eventRepository.getEventsPastLeague(id)
                         .subscribeOn(schedulerProvider.io())
                         .observeOn(schedulerProvider.ui())
                         .subscribe(
                                 { events ->
-                                    view.showDataList(events)
+                                    view.showDataList(events.data.sortedWith(compareByDescending {it.dateEvent}))
                                     view.hideLoading()
                                     EspressoTestingIdlingResource.decrement()
                                 },
@@ -82,40 +85,11 @@ class MatchSchedulePresenter(private val view: MatchScheduleView,
         )
     }
 
-//    fun getEventsNextLeague(id: String) {
-//        view.showLoading()
-//
-//        matchScheduleRepository
-//                .getEventsNextLeague(id, object : EventListRepositoryCallback {
-//                    override fun onDataLoaded(data: DTOEventList) {
-//                        view.onDataLoaded(data)
-//                    }
-//
-//                    override fun onDataError() {
-//                        view.onDataError()
-//                    }
-//                })
-//    }
-//
-//    fun getEventsPastLeague(id: String) {
-//        view.showLoading()
-//        matchScheduleRepository
-//                .getEventsPastLeague(id, object : EventListRepositoryCallback {
-//                    override fun onDataLoaded(data: DTOEventList) {
-//                        view.onDataLoaded(data)
-//                    }
-//
-//                    override fun onDataError() {
-//                        view.onDataError()
-//                    }
-//                }, schedulerProvider)
-//    }
-
     override fun onAttach(view: BaseView) {
-        matchScheduleRepository.onAttach()
+        eventRepository.onAttach()
     }
 
     override fun onDetach() {
-        matchScheduleRepository.onDetach()
+        eventRepository.onDetach()
     }
 }

@@ -1,13 +1,13 @@
-package id.ergun.myfootballdb.modules.player
+package id.ergun.myfootballdb.modules.player.detail
 
-import id.ergun.myfootballdb.bases.models.DTOPlayerList
 import id.ergun.myfootballdb.bases.views.BaseView
+import id.ergun.myfootballdb.models.Player
 
-class PlayerContract {
+class PlayerDetailContract {
     interface View: BaseView {
         fun showLoading()
         fun hideLoading()
-        fun showDataList(data: DTOPlayerList)
+        fun showData(player: Player)
     }
 
     interface Presenter {

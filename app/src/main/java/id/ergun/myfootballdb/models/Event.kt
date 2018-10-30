@@ -1,4 +1,4 @@
-package id.ergun.myfootballdb.modules.match.schedule
+package id.ergun.myfootballdb.models
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

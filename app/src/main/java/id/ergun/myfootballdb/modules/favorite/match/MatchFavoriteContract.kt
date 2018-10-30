@@ -4,8 +4,15 @@ import id.ergun.myfootballdb.bases.views.BaseView
 import id.ergun.myfootballdb.db.MatchFavorite
 
 
-interface MatchFavoriteView: BaseView {
-    fun showLoading()
-    fun hideLoading()
-    fun showDataList(match_favorites: List<MatchFavorite>)
+class MatchFavoriteContract {
+    interface View: BaseView {
+        fun showLoading()
+        fun hideLoading()
+        fun showDataList(data: List<MatchFavorite>)
+    }
+
+    interface Presenter {
+        fun onAttach(T: BaseView)
+        fun onDetach()
+    }
 }

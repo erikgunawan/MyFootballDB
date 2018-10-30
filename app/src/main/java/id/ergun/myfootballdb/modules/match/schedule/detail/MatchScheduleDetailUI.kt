@@ -1,4 +1,4 @@
-package id.ergun.myfootballdb.modules.matchschedule.detail
+package id.ergun.myfootballdb.modules.match.schedule.detail
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -19,6 +19,7 @@ class MatchScheduleDetailUI : AnkoComponent<MatchScheduleDetailActivity> {
     lateinit var progressBar: ProgressBar
 
     lateinit var tvDateEvent: TextView
+    lateinit var tvTimeEvent: TextView
 
     lateinit var ivHomeBadge: ImageView
     lateinit var tvHomeTeam: TextView
@@ -72,6 +73,16 @@ class MatchScheduleDetailUI : AnkoComponent<MatchScheduleDetailActivity> {
 
                             tvDateEvent = textView {
                                 id = R.id.tv_date_event
+                                gravity = Gravity.CENTER_HORIZONTAL
+                                textSize = 14F
+                                textColor = Color.BLUE
+                                typeface = Typeface.DEFAULT_BOLD
+                            }.lparams(width = matchParent, height = wrapContent) {
+                                margin = dip(5)
+                            }
+
+                            tvTimeEvent = textView {
+                                id = R.id.tv_time_event
                                 gravity = Gravity.CENTER_HORIZONTAL
                                 textSize = 14F
                                 textColor = Color.BLUE

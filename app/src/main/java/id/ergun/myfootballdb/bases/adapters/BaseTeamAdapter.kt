@@ -1,4 +1,4 @@
-package id.ergun.myfootballdb.modules.team
+package id.ergun.myfootballdb.bases.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -13,8 +13,8 @@ import id.ergun.myfootballdb.models.Team
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.find
 
-class TeamAdapter(private val teams: List<Team>,
-                  private val listener: (TeamAdapter.ItemClickListener)): RecyclerView.Adapter<TeamAdapter.TeamViewHolder>() {
+class BaseTeamAdapter(private val teams: List<Team>,
+                      private val listener: (BaseTeamAdapter.ItemClickListener)): RecyclerView.Adapter<BaseTeamAdapter.TeamViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamViewHolder {
         val view = TeamViewHolder(BaseTeamAdapterUI().createView(AnkoContext.create(parent.context, parent)))
@@ -27,6 +27,8 @@ class TeamAdapter(private val teams: List<Team>,
     override fun getItemCount(): Int = teams.size
 
     override fun onBindViewHolder(holder: TeamViewHolder, position: Int) = holder.bindItem(teams[position])
+
+    fun getData(): List<Team> = teams
 
     class TeamViewHolder(view: View): RecyclerView.ViewHolder(view) {
 

@@ -1,9 +1,7 @@
 package id.ergun.myfootballdb.configs
 
-const val LEAGUE_ID = "4328"
-
 const val EVENT = "event"
 
-const val HOME = "home"
+const val TEAM = "team"
 
-const val AWAY = "away"
+const val PLAYER = "player"

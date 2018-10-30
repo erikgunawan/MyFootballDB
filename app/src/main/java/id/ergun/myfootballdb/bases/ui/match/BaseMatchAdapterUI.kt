@@ -1,4 +1,4 @@
-package id.ergun.myfootballdb.modules.match.schedule
+package id.ergun.myfootballdb.bases.ui.match
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -6,11 +6,14 @@ import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import id.ergun.myfootballdb.R
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 
-class MatchScheduleAdapterUI : AnkoComponent<ViewGroup> {
+class BaseMatchAdapterUI : AnkoComponent<ViewGroup> {
+
+    lateinit var ivAddToCalendar: ImageView
 
     override fun createView(ui: AnkoContext<ViewGroup>): View = with(ui) {
 
@@ -21,52 +24,72 @@ class MatchScheduleAdapterUI : AnkoComponent<ViewGroup> {
 
             backgroundColor = Color.GRAY
 
-            verticalLayout {
+            relativeLayout {
                 padding = dip(8)
                 lparams(width = matchParent, height = wrapContent)
                 backgroundColor = Color.WHITE
 
-                textView {
-                    id = R.id.tv_date_event
-                    gravity = Gravity.CENTER_HORIZONTAL
-                    textSize = 14F
-                    textColor = Color.BLUE
-                    typeface = Typeface.DEFAULT_BOLD
-                }.lparams(width = matchParent, height = wrapContent)
+                ivAddToCalendar = imageView {
+                    id = R.id.iv_add_to_calendar
+                    backgroundResource = R.drawable.ic_add_to_calendar_24dp
+                }.lparams(width = dip(25), height = dip(25)) {
+                    alignParentRight()
+                    alignParentTop()
+                }
 
-                linearLayout {
-                    padding = dip(8)
+                verticalLayout {
                     lparams(width = matchParent, height = wrapContent)
 
                     textView {
-                        id = R.id.tv_home_team
-                        gravity = Gravity.END
-                        singleLine = true
-                        ellipsize = TextUtils.TruncateAt.END
-                    }.lparams(width = 0, height = wrapContent, weight = 0.35F)
-
-                    textView {
-                        id = R.id.tv_home_score
+                        id = R.id.tv_date_event
                         gravity = Gravity.CENTER_HORIZONTAL
+                        textSize = 14F
+                        textColor = Color.BLUE
                         typeface = Typeface.DEFAULT_BOLD
-                    }.lparams(width = 0, height = wrapContent, weight = 0.1F)
-
-                    textView("VS") {
-                        gravity = Gravity.CENTER_HORIZONTAL
-                    }.lparams(width = 0, height = wrapContent, weight = 0.1F)
+                    }.lparams(width = matchParent, height = wrapContent)
 
                     textView {
-                        id = R.id.tv_away_score
+                        id = R.id.tv_time_event
                         gravity = Gravity.CENTER_HORIZONTAL
+                        textSize = 14F
+                        textColor = Color.BLUE
                         typeface = Typeface.DEFAULT_BOLD
-                    }.lparams(width = 0, height = wrapContent, weight = 0.1F)
+                    }.lparams(width = matchParent, height = wrapContent)
 
-                    textView {
-                        id = R.id.tv_away_team
-                        gravity = Gravity.START
-                        singleLine = true
-                        ellipsize = TextUtils.TruncateAt.END
-                    }.lparams(width = 0, height = wrapContent, weight = 0.35F)
+                    linearLayout {
+                        padding = dip(8)
+                        lparams(width = matchParent, height = wrapContent)
+
+                        textView {
+                            id = R.id.tv_home_team
+                            gravity = Gravity.END
+                            singleLine = true
+                            ellipsize = TextUtils.TruncateAt.END
+                        }.lparams(width = 0, height = wrapContent, weight = 0.35F)
+
+                        textView {
+                            id = R.id.tv_home_score
+                            gravity = Gravity.CENTER_HORIZONTAL
+                            typeface = Typeface.DEFAULT_BOLD
+                        }.lparams(width = 0, height = wrapContent, weight = 0.1F)
+
+                        textView("VS") {
+                            gravity = Gravity.CENTER_HORIZONTAL
+                        }.lparams(width = 0, height = wrapContent, weight = 0.1F)
+
+                        textView {
+                            id = R.id.tv_away_score
+                            gravity = Gravity.CENTER_HORIZONTAL
+                            typeface = Typeface.DEFAULT_BOLD
+                        }.lparams(width = 0, height = wrapContent, weight = 0.1F)
+
+                        textView {
+                            id = R.id.tv_away_team
+                            gravity = Gravity.START
+                            singleLine = true
+                            ellipsize = TextUtils.TruncateAt.END
+                        }.lparams(width = 0, height = wrapContent, weight = 0.35F)
+                    }
                 }
             }
         }

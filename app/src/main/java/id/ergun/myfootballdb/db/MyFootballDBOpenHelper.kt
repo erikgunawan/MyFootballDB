@@ -23,6 +23,7 @@ class MyFootballDBOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, DB_NAM
                 MatchFavorite.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
                 MatchFavorite.ID_EVENT to INTEGER + UNIQUE,
                 MatchFavorite.DATE_EVENT to TEXT,
+                MatchFavorite.TIME_EVENT to TEXT,
                 MatchFavorite.ID_HOME_TEAM to INTEGER,
                 MatchFavorite.HOME_TEAM to TEXT,
                 MatchFavorite.HOME_SCORE to INTEGER,
@@ -46,12 +47,24 @@ class MyFootballDBOpenHelper(ctx: Context) : ManagedSQLiteOpenHelper(ctx, DB_NAM
                 MatchFavorite.AWAY_LINEUP_MIDFIELDER to TEXT,
                 MatchFavorite.AWAY_LINEUP_FORWARD to TEXT,
                 MatchFavorite.AWAY_LINEUP_SUBSTITUTES to TEXT,
-                MatchFavorite.AWAY_BADGE to TEXT
+                MatchFavorite.AWAY_BADGE to TEXT,
+                MatchFavorite.ID_LEAGUE to INTEGER
+        )
+
+        db.createTable(TeamFavorite.TABLE_TEAM_FAVORITE, true,
+                TeamFavorite.ID to INTEGER + PRIMARY_KEY + AUTOINCREMENT,
+                TeamFavorite.ID_TEAM to INTEGER + UNIQUE,
+                TeamFavorite.NAME_TEAM to TEXT,
+                TeamFavorite.DESCRIPTION_TEAM to TEXT,
+                TeamFavorite.FORMED_YEAR_TEAM to INTEGER,
+                TeamFavorite.STADIUM_TEAM to TEXT,
+                TeamFavorite.BADGE_TEAM to TEXT
         )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.dropTable(MatchFavorite.TABLE_MATCH_FAVORITE, true)
+        db.dropTable(TeamFavorite.TABLE_TEAM_FAVORITE, true)
     }
 }
 

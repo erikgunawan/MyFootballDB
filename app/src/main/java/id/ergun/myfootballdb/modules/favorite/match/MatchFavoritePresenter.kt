@@ -1,8 +1,7 @@
-package id.ergun.myfootballdb.modules.match.favorite
+package id.ergun.myfootballdb.modules.favorite.match
 
 import android.content.Context
 import android.database.sqlite.SQLiteException
-import id.ergun.myfootballdb.bases.presenters.BasePresenter
 import id.ergun.myfootballdb.bases.views.BaseView
 import id.ergun.myfootballdb.db.MatchFavorite
 import id.ergun.myfootballdb.db.database
@@ -10,7 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.select
 
-class MatchFavoritePresenter(private val context: Context?, private val view: MatchFavoriteView): BasePresenter<BaseView> {
+class MatchFavoritePresenter(private val context: Context?, private val view: MatchFavoriteContract.View): MatchFavoriteContract.Presenter {
 
     private var compositeDisposable: CompositeDisposable? = null
 

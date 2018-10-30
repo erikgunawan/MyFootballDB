@@ -1,29 +1,21 @@
-package id.ergun.myfootballdb.modules.matchschedule.detail
+package id.ergun.myfootballdb.modules.match.schedule.detail
 
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import com.bumptech.glide.Glide
-import id.ergun.myfootballdb.R.drawable.ic_add_favorite
-import id.ergun.myfootballdb.R.drawable.ic_added_favorite
+import id.ergun.myfootballdb.R.drawable.ic_add_favorite_white_24dp
+import id.ergun.myfootballdb.R.drawable.ic_added_favorite_white_24dp
 import id.ergun.myfootballdb.R.id.add_to_favorite
 import id.ergun.myfootballdb.R.menu.menu_match_schedule_detail
-import id.ergun.myfootballdb.bases.models.DTOTeamList
-import id.ergun.myfootballdb.configs.AWAY
 import id.ergun.myfootballdb.configs.EVENT
-import id.ergun.myfootballdb.configs.HOME
 import id.ergun.myfootballdb.db.MatchFavorite
 import id.ergun.myfootballdb.db.database
-import id.ergun.myfootballdb.models.Team
-import id.ergun.myfootballdb.modules.matchschedule.Event
-import id.ergun.myfootballdb.utils.formatString
-import id.ergun.myfootballdb.utils.invisible
-import id.ergun.myfootballdb.utils.toLocalDate
-import id.ergun.myfootballdb.utils.visible
+import id.ergun.myfootballdb.models.Event
+import id.ergun.myfootballdb.utils.*
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
@@ -32,7 +24,7 @@ import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.setContentView
 import org.jetbrains.anko.support.v4.onRefresh
 
-class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView {
+class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailContract.View {
 
     private lateinit var presenter: MatchScheduleDetailPresenter
     private lateinit var view: MatchScheduleDetailUI
@@ -75,6 +67,7 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
         this.event = event
 
         view.tvDateEvent.text = toLocalDate(event.dateEvent)
+        view.tvTimeEvent.text = toLocalTime(event.strTime)
 
         view.tvHomeTeam.text = event.strHomeTeam
 
@@ -144,19 +137,19 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
 //        showData(ev)
 //    }
 
-    override fun onDataLoaded(data: DTOTeamList, side: String) {
-        val team: Team = data.data[0]
-        if (side == HOME) {
-            showHomeBadge(team.strTeamBadge)
-        }
-        else if (side == AWAY) {
-            showAwayBadge(team.strTeamBadge)
-        }
-    }
-
-    override fun onDataError(side: String) {
-        Log.d("error", side)
-    }
+//    override fun onDataLoaded(data: DTOTeamList, side: String) {
+//        val team: Team = data.data[0]
+//        if (side == HOME) {
+//            showHomeBadge(team.strTeamBadge)
+//        }
+//        else if (side == AWAY) {
+//            showAwayBadge(team.strTeamBadge)
+//        }
+//    }
+//
+//    override fun onDataError(side: String) {
+//        Log.d("error", side)
+//    }
 
     override fun onDestroy() {
         presenter.onDetach()
@@ -199,6 +192,7 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
                 insert(MatchFavorite.TABLE_MATCH_FAVORITE,
                         MatchFavorite.ID_EVENT to event.idEvent,
                         MatchFavorite.DATE_EVENT to event.dateEvent,
+                        MatchFavorite.TIME_EVENT to event.strTime,
                         MatchFavorite.ID_HOME_TEAM to event.idHomeTeam,
                         MatchFavorite.HOME_TEAM to event.strHomeTeam,
                         MatchFavorite.HOME_SCORE to event.intHomeScore,
@@ -222,7 +216,8 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
                         MatchFavorite.AWAY_LINEUP_MIDFIELDER to event.strAwayLineupMidfield,
                         MatchFavorite.AWAY_LINEUP_FORWARD to event.strAwayLineupForward,
                         MatchFavorite.AWAY_LINEUP_SUBSTITUTES to event.strAwayLineupSubstitutes,
-                        MatchFavorite.AWAY_BADGE to awayBadge
+                        MatchFavorite.AWAY_BADGE to awayBadge,
+                        MatchFavorite.ID_LEAGUE to event.idLeague
                 )
             }
             snackbar(view.swipeRefresh, "Added to favorite").show()
@@ -245,9 +240,9 @@ class MatchScheduleDetailActivity : AppCompatActivity(), MatchScheduleDetailView
 
     private fun setFavorite() {
         if (isFavorite)
-            menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, ic_added_favorite)
+            menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, ic_added_favorite_white_24dp)
         else
-            menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, ic_add_favorite)
+            menuItem?.getItem(0)?.icon = ContextCompat.getDrawable(this, ic_add_favorite_white_24dp)
     }
 
     private fun favoriteState(){

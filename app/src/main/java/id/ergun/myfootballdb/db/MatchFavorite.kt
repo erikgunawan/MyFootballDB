@@ -1,12 +1,12 @@
 package id.ergun.myfootballdb.db
 
-import id.ergun.myfootballdb.configs.LEAGUE_ID
-import id.ergun.myfootballdb.modules.matchschedule.Event
+import id.ergun.myfootballdb.models.Event
 
 data class MatchFavorite(
         val id: Long?,
         val idEvent: Int?,
         val dateEvent: String?,
+        val timeEvent: String?,
         val idHomeTeam: Int?,
         val homeTeam: String?,
         val homeScore: Int?,
@@ -30,7 +30,8 @@ data class MatchFavorite(
         val awayLineupMidfielder: String?,
         val awayLineupForward: String?,
         val awayLineupSubstitutes: String?,
-        val awayBadge: String?
+        val awayBadge: String?,
+        val idLeague: Int?
 ) {
 
     companion object {
@@ -38,6 +39,8 @@ data class MatchFavorite(
         const val ID: String = "ID_"
         const val ID_EVENT: String = "ID_EVENT"
         const val DATE_EVENT: String = "DATE_EVENT"
+        const val TIME_EVENT: String = "TIME_EVENT"
+        const val ID_LEAGUE: String = "ID_LEAGUE"
 
         const val ID_HOME_TEAM: String = "ID_HOME_TEAM"
         const val HOME_TEAM: String = "HOME_TEAM"
@@ -69,45 +72,32 @@ data class MatchFavorite(
     object Mapper {
         fun toEvent(matchFavorite: MatchFavorite) =
                 Event(
-                        matchFavorite.idEvent,
-                        null,
-                        null,
-                        null,
-                        null,
-                        LEAGUE_ID.toInt(),
-                        null,
-                        null,
-                        matchFavorite.homeTeam,
-                        matchFavorite.awayTeam,
-                        matchFavorite.homeScore,
-                        null,
-                        matchFavorite.awayScore,
-                        matchFavorite.homeGoalDetails,
-                        null,
-                        null,
-                        matchFavorite.homeLineupGoalkeeper,
-                        matchFavorite.homeLineupDefense,
-                        matchFavorite.homeLineupMidfielder,
-                        matchFavorite.homeLineupForward,
-                        matchFavorite.homeLineupSubstitutes,
-                        matchFavorite.homeFormation,
-                        null,
-                        null,
-                        matchFavorite.awayGoalDetails,
-                        matchFavorite.awayLineupGoalkeeper,
-                        matchFavorite.awayLineupDefense,
-                        matchFavorite.awayLineupMidfielder,
-                        matchFavorite.awayLineupForward,
-                        matchFavorite.awayLineupSubstitutes,
-                        matchFavorite.awayFormation,
-                        matchFavorite.homeShots,
-                        matchFavorite.awayShots,
-                        matchFavorite.dateEvent,
-                        null,
-                        null,
-                        matchFavorite.idHomeTeam,
-                        matchFavorite.idAwayTeam,
-                        null
+                        idEvent = matchFavorite.idEvent,
+                        idLeague = matchFavorite.idLeague,
+                        strHomeTeam = matchFavorite.homeTeam,
+                        strAwayTeam = matchFavorite.awayTeam,
+                        intHomeScore = matchFavorite.homeScore,
+                        intAwayScore = matchFavorite.awayScore,
+                        strHomeGoalDetails = matchFavorite.homeGoalDetails,
+                        strHomeLineupGoalkeeper = matchFavorite.homeLineupGoalkeeper,
+                        strHomeLineupDefense = matchFavorite.homeLineupDefense,
+                        strHomeLineupMidfield = matchFavorite.homeLineupMidfielder,
+                        strHomeLineupForward = matchFavorite.homeLineupForward,
+                        strHomeLineupSubstitutes = matchFavorite.homeLineupSubstitutes,
+                        strHomeFormation = matchFavorite.homeFormation,
+                        strAwayGoalDetails = matchFavorite.awayGoalDetails,
+                        strAwayLineupGoalkeeper = matchFavorite.awayLineupGoalkeeper,
+                        strAwayLineupDefense = matchFavorite.awayLineupDefense,
+                        strAwayLineupMidfield = matchFavorite.awayLineupMidfielder,
+                        strAwayLineupForward = matchFavorite.awayLineupForward,
+                        strAwayLineupSubstitutes = matchFavorite.awayLineupSubstitutes,
+                        strAwayFormation = matchFavorite.awayFormation,
+                        intHomeShots = matchFavorite.homeShots,
+                        intAwayShots = matchFavorite.awayShots,
+                        dateEvent = matchFavorite.dateEvent,
+                        strTime = matchFavorite.timeEvent,
+                        idHomeTeam = matchFavorite.idHomeTeam,
+                        idAwayTeam = matchFavorite.idAwayTeam
                 )
     }
 }

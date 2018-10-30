@@ -1,16 +1,15 @@
-package id.ergun.myfootballdb.modules.favorite.match
+package id.ergun.myfootballdb.modules.favorite.team
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import id.ergun.myfootballdb.bases.adapters.BaseMatchAdapter
-import id.ergun.myfootballdb.configs.EVENT
-import id.ergun.myfootballdb.db.MatchFavorite
-import id.ergun.myfootballdb.db.MatchFavorite.Mapper.toEvent
-import id.ergun.myfootballdb.models.Event
-import id.ergun.myfootballdb.modules.match.schedule.detail.MatchScheduleDetailActivity
+import id.ergun.myfootballdb.bases.adapters.BaseTeamAdapter
+import id.ergun.myfootballdb.configs.TEAM
+import id.ergun.myfootballdb.db.TeamFavorite
+import id.ergun.myfootballdb.db.TeamFavorite.Mapper.toTeam
+import id.ergun.myfootballdb.modules.team.detail.TeamDetailActivity
 import id.ergun.myfootballdb.utils.invisible
 import id.ergun.myfootballdb.utils.visible
 import org.jetbrains.anko.AnkoContext
@@ -18,18 +17,18 @@ import org.jetbrains.anko.support.v4.ctx
 import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.startActivity
 
-class MatchFavoriteFragment: Fragment(), MatchFavoriteView,
-        BaseMatchAdapter.ItemClickListener {
+class TeamFavoriteFragment: Fragment(), TeamFavoriteContract.View,
+        BaseTeamAdapter.ItemClickListener {
 
-    private lateinit var presenter: MatchFavoritePresenter
+    private lateinit var presenter: TeamFavoritePresenter
 
-    private lateinit var view: MatchFavoriteBaseUI<MatchFavoriteFragment>
+    private lateinit var view: TeamFavoriteUI<TeamFavoriteFragment>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        view = MatchFavoriteBaseUI()
+        view = TeamFavoriteUI()
         val rootView = view.createView(AnkoContext.create(ctx, this))
 
-        presenter = MatchFavoritePresenter(context, this)
+        presenter = TeamFavoritePresenter(context, this)
         presenter.onAttach(this)
 
         view.swipeRefresh.onRefresh {
@@ -37,16 +36,15 @@ class MatchFavoriteFragment: Fragment(), MatchFavoriteView,
             presenter.getFavoriteMatch()
         }
 
-        view.adapter = BaseMatchAdapter(view.eventList, this)
-        view.rvEvent.adapter = view.adapter
+        view.adapter = BaseTeamAdapter(view.teamList, this)
+        view.rvTeam.adapter = view.adapter
 
         presenter.getFavoriteMatch()
         return rootView
     }
 
     override fun onItemClick(v: View, position: Int) {
-        val event: Event = view.adapter.getData()[position]
-        startActivity<MatchScheduleDetailActivity>(EVENT to event)
+        startActivity<TeamDetailActivity>(TEAM to view.adapter.getData()[position])
     }
 
     override fun showLoading() {
@@ -57,11 +55,11 @@ class MatchFavoriteFragment: Fragment(), MatchFavoriteView,
         view.progressBar.invisible()
     }
 
-    override fun showDataList(match_favorites: List<MatchFavorite>) {
-        view.eventList.clear()
+    override fun showDataList(data: List<TeamFavorite>) {
+        view.teamList.clear()
 
-        for (matchFavorite: MatchFavorite in match_favorites) {
-            view.eventList.add(toEvent(matchFavorite))
+        for (teamFavorite: TeamFavorite in data) {
+            view.teamList.add(toTeam(teamFavorite))
         }
 
         view.adapter.notifyDataSetChanged()

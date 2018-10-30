@@ -7,17 +7,18 @@ import android.view.Gravity
 import android.widget.ProgressBar
 import id.ergun.myfootballdb.R
 import id.ergun.myfootballdb.R.color.colorAccent
-import id.ergun.myfootballdb.db.MatchFavorite
+import id.ergun.myfootballdb.bases.adapters.BaseMatchAdapter
+import id.ergun.myfootballdb.models.Event
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
 class MatchFavoriteBaseUI<T> : AnkoComponent<T> {
 
-    val eventList: MutableList<MatchFavorite> = mutableListOf()
+    val eventList: MutableList<Event> = mutableListOf()
 
     lateinit var rvEvent: RecyclerView
-    lateinit var adapter: MatchFavoriteAdapter
+    lateinit var adapter: BaseMatchAdapter
     lateinit var progressBar: ProgressBar
     lateinit var swipeRefresh: SwipeRefreshLayout
 

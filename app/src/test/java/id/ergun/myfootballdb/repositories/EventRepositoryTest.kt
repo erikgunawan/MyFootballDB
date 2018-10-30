@@ -1,26 +1,24 @@
-package id.ergun.myfootballdb.modules.matchschedule
+package id.ergun.myfootballdb.repositories
 
 import id.ergun.myfootballdb.configs.ApiService
 import id.ergun.myfootballdb.configs.RetrofitClient
-import id.ergun.myfootballdb.repositories.MatchRepositoryImpl
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 
-
-class MatchRepositoryTest {
+class EventRepositoryTest {
 
     @Mock
     var apiService: ApiService = RetrofitClient().create()
 
-    private lateinit var repository: MatchRepositoryImpl
+    private lateinit var repository: EventRepositoryImpl
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        repository = MatchRepositoryImpl(apiService)
+        repository = EventRepositoryImpl(apiService)
     }
 
     @Test
@@ -35,5 +33,19 @@ class MatchRepositoryTest {
         val id = "4328"
         repository.getEventsPastLeague(id)
         Mockito.verify(apiService).getEventsPastLeague(id)
+    }
+
+    @Test
+    fun getDetailEventTest() {
+        val id = "4328"
+        repository.getDetailEvent(id)
+        Mockito.verify(apiService).getDetailEvent(id)
+    }
+
+    @Test
+    fun searchEventsTest() {
+        val name = "Arsenal"
+        repository.searchEvents(name)
+        Mockito.verify(apiService).searchEvents(name)
     }
 }

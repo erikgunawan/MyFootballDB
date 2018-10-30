@@ -1,23 +1,25 @@
-package id.ergun.myfootballdb.modules.matchschedule.detail
+package id.ergun.myfootballdb.modules.match.schedule.detail
 
 import android.util.Log
-import id.ergun.myfootballdb.bases.presenters.BasePresenter
 import id.ergun.myfootballdb.bases.views.BaseView
+import id.ergun.myfootballdb.repositories.EventRepositoryImpl
+import id.ergun.myfootballdb.repositories.TeamRepositoryImpl
 import id.ergun.myfootballdb.utils.espresso.EspressoTestingIdlingResource
 import id.ergun.myfootballdb.utils.scheduler.AppSchedulerProvider
 import id.ergun.myfootballdb.utils.scheduler.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 
-class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailView,
-                                   private val matchScheduleDetailRepository: MatchScheduleDetailRepositoryImpl = MatchScheduleDetailRepositoryImpl(),
+class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailContract.View,
+                                   private val eventRepository: EventRepositoryImpl = EventRepositoryImpl(),
+                                   private val teamRepository: TeamRepositoryImpl = TeamRepositoryImpl(),
                                    private var schedulerProvider: SchedulerProvider = AppSchedulerProvider(),
-                                   private var compositeDisposable: CompositeDisposable? = CompositeDisposable()): BasePresenter<BaseView> {
+                                   private var compositeDisposable: CompositeDisposable? = CompositeDisposable()): MatchScheduleDetailContract.Presenter {
 
     fun getDetailEvent(id: String) {
         EspressoTestingIdlingResource.increment()
         view.showLoading()
         compositeDisposable?.add(
-                matchScheduleDetailRepository.getDetailEvent(id)
+                eventRepository.getDetailEvent(id)
                         .subscribeOn(schedulerProvider.io())
                         .observeOn(schedulerProvider.ui())
                         .subscribe(
@@ -38,7 +40,7 @@ class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailView,
     fun getDetailHomeTeam(id: String) {
         EspressoTestingIdlingResource.increment()
         compositeDisposable?.add(
-                matchScheduleDetailRepository.getDetailTeam(id)
+                teamRepository.getDetailTeam(id)
                         .subscribeOn(schedulerProvider.io())
                         .observeOn(schedulerProvider.ui())
                         .subscribe(
@@ -57,7 +59,7 @@ class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailView,
     fun getDetailAwayTeam(id: String) {
         EspressoTestingIdlingResource.increment()
         compositeDisposable?.add(
-                matchScheduleDetailRepository.getDetailTeam(id)
+                teamRepository.getDetailTeam(id)
                         .subscribeOn(schedulerProvider.io())
                         .observeOn(schedulerProvider.ui())
                         .subscribe(
@@ -73,55 +75,11 @@ class MatchScheduleDetailPresenter(private val view: MatchScheduleDetailView,
         )
     }
 
-//    fun getDetailEvent(id: String) {
-//        view.showLoading()
-//
-//        matchScheduleDetailRepository
-//                .getDetailEvent(id, object : EventListRepositoryCallback {
-//                    override fun onDataLoaded(data: DTOEventList) {
-//                        view.onDataLoaded(data)
-//                    }
-//
-//                    override fun onDataError() {
-//                        view.onDataError()
-//                    }
-//                })
-//
-//    }
-//
-//    fun getDetailTeam(id: String, side: String) {
-//        if (side == HOME) {
-//            matchScheduleDetailRepository
-//                    .getDetailHomeTeam(id, object : TeamListRepositoryCallback {
-//                        override fun onDataLoaded(data: DTOTeamList, side: String) {
-//                            view.onDataLoaded(data, side)
-//                        }
-//
-//                        override fun onDataError(side: String) {
-//                            view.onDataError(side)
-//                        }
-//                    })
-//        }
-//        else if (side == AWAY) {
-//            matchScheduleDetailRepository
-//                    .getDetailAwayTeam(id, object : TeamListRepositoryCallback {
-//                        override fun onDataLoaded(data: DTOTeamList, side: String) {
-//                            view.onDataLoaded(data, side)
-//                        }
-//
-//                        override fun onDataError(side: String) {
-//                            view.onDataError(side)
-//                        }
-//                    })
-//        }
-//
-//    }
-
     override fun onAttach(view: BaseView) {
-        matchScheduleDetailRepository.onAttach()
+        eventRepository.onAttach()
     }
 
     override fun onDetach() {
-        matchScheduleDetailRepository.onDetach()
+        eventRepository.onDetach()
     }
 }

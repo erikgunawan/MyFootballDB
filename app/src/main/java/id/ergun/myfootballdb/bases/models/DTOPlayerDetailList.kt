@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 import id.ergun.myfootballdb.models.Player
 
 
-data class DTOPlayerList(
+data class DTOPlayerDetailList(
 
-        @SerializedName("player")
+        @SerializedName("players")
         val data: List<Player>
 )

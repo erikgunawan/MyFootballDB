@@ -1,7 +1,10 @@
 package id.ergun.myfootballdb.models
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class Team(
 
         @SerializedName("idTeam")
@@ -78,4 +81,4 @@ data class Team(
         val strYoutube: String? = null,
         @SerializedName("strLocked")
         val strLocked: String? = null
-)
+): Parcelable

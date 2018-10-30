@@ -1,12 +1,10 @@
-package id.ergun.myfootballdb.modules.matchschedule.detail
+package id.ergun.myfootballdb.modules.match.schedule.detail
 
 import com.nhaarman.mockito_kotlin.whenever
 import id.ergun.myfootballdb.bases.models.DTOEventList
 import id.ergun.myfootballdb.bases.models.DTOTeamList
 import id.ergun.myfootballdb.models.Event
 import id.ergun.myfootballdb.models.Team
-import id.ergun.myfootballdb.modules.match.schedule.detail.MatchScheduleDetailContract
-import id.ergun.myfootballdb.modules.match.schedule.detail.MatchScheduleDetailPresenter
 import id.ergun.myfootballdb.repositories.EventRepositoryImpl
 import id.ergun.myfootballdb.repositories.TeamRepositoryImpl
 import id.ergun.myfootballdb.utils.scheduler.RxImmediateSchedulerRule

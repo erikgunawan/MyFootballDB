@@ -1,10 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="navigation_main" type="id" />
+
+    <item name="toolbar" type="id" />
 
     <item name="rv_event" type="id" />
+    <item name="rv_event_next" type="id" />
+    <item name="rv_event_prev" type="id" />
+    <item name="rv_team" type="id" />
+    <item name="rv_player" type="id" />
+
+    <item name="spin_league" type="id" />
+
+    <item name="iv_team_badge" type="id" />
+    <item name="tv_team_name" type="id" />
+    <item name="tv_team_overview" type="id" />
+
+    <item name="iv_player_cutout" type="id" />
+    <item name="tv_player_name" type="id" />
+    <item name="tv_player_position" type="id" />
 
     <item name="tv_name" type="id" />
     <item name="tv_date_event" type="id" />
+    <item name="tv_time_event" type="id" />
     <item name="tv_event" type="id" />
     <item name="tv_home_team" type="id" />
     <item name="tv_away_team" type="id" />
@@ -35,4 +53,5 @@
     <item name="swipe_refresh" type="id" />
     <item name="iv_home_badge" type="id" />
     <item name="iv_away_badge" type="id" />
+    <item name="iv_add_to_calendar" type="id" />
 </resources>

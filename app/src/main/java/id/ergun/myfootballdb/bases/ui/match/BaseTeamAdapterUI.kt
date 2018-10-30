@@ -1,4 +1,4 @@
-package id.ergun.myfootballdb.modules.team
+package id.ergun.myfootballdb.bases.ui.match
 
 import android.graphics.Color
 import android.view.View
@@ -8,7 +8,7 @@ import id.ergun.myfootballdb.R.id.tv_team_name
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
 
-class TeamAdapterUI : AnkoComponent<ViewGroup> {
+class BaseTeamAdapterUI : AnkoComponent<ViewGroup> {
     override fun createView(ui: AnkoContext<ViewGroup>): View {
         return with(ui) {
             cardView {

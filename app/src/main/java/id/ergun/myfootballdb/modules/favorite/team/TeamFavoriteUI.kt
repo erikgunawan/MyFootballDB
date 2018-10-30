@@ -1,4 +1,4 @@
-package id.ergun.myfootballdb.modules.favorite.match
+package id.ergun.myfootballdb.modules.favorite.team
 
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
@@ -7,17 +7,18 @@ import android.view.Gravity
 import android.widget.ProgressBar
 import id.ergun.myfootballdb.R
 import id.ergun.myfootballdb.R.color.colorAccent
-import id.ergun.myfootballdb.db.MatchFavorite
+import id.ergun.myfootballdb.bases.adapters.BaseTeamAdapter
+import id.ergun.myfootballdb.models.Team
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
-class MatchFavoriteBaseUI<T> : AnkoComponent<T> {
+class TeamFavoriteUI<T> : AnkoComponent<T> {
 
-    val eventList: MutableList<MatchFavorite> = mutableListOf()
+    val teamList: MutableList<Team> = mutableListOf()
 
-    lateinit var rvEvent: RecyclerView
-    lateinit var adapter: MatchFavoriteAdapter
+    lateinit var rvTeam: RecyclerView
+    lateinit var adapter: BaseTeamAdapter
     lateinit var progressBar: ProgressBar
     lateinit var swipeRefresh: SwipeRefreshLayout
 
@@ -36,8 +37,8 @@ class MatchFavoriteBaseUI<T> : AnkoComponent<T> {
                 relativeLayout {
                     lparams (width = matchParent, height = matchParent)
 
-                    rvEvent = recyclerView {
-                        id = R.id.rv_event
+                    rvTeam = recyclerView {
+                        id = R.id.rv_team
                         layoutManager = LinearLayoutManager(ctx)
                     }.lparams(width = matchParent, height = matchParent)
 
